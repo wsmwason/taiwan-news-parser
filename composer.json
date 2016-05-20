@@ -1,0 +1,31 @@
+{
+    "name": "wsmwason/taiwan-news-parser",
+    "description": "台灣各新聞網站新聞解析器",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "wsmwason",
+            "email": "wsmwason@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "wsmwason\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "imangazaliev/didom": "^1.6"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.3"
+    }
+}
