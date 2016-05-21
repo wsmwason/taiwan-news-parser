@@ -1,6 +1,11 @@
 TaiwanNewsParser
 ===
 
+[![Build Status](https://travis-ci.org/wsmwason/taiwan-news-parser.svg)](https://travis-ci.org/wsmwason/taiwan-news-parser)
+[![Latest Stable Version](https://poser.pugx.org/wsmwason/taiwan-news-parser/v/stable)](https://packagist.org/packages/wsmwason/taiwan-news-parser)
+[![Total Downloads](https://poser.pugx.org/wsmwason/taiwan-news-parser/downloads)](https://packagist.org/packages/wsmwason/taiwan-news-parser)
+[![License](https://poser.pugx.org/wsmwason/taiwan-news-parser/license)](https://packagist.org/packages/wsmwason/taiwan-news-parser)
+
 台灣各新聞網站新聞解析器 PHP 版本
 
 ### 關於此程式
