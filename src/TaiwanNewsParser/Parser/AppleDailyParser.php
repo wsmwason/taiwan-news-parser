@@ -96,8 +96,8 @@ class AppleDailyParser implements IParser {
 
     protected function parseThumbnailImage()
     {
-        if (preg_match('#"thumbnailUrl": "(.*?)"#', $this->document->html(), $match)) {
-            return $match[1];
+        if (count($elements = $this->document->find('meta[property=og:image]')) != 0) {
+            return $elements[0]->attr('content');
         }
     }
 

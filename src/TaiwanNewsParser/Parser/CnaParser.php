@@ -39,8 +39,8 @@ class TvbsParser implements IParser {
 
     private function parseUniqueUrl()
     {
-        if (count($elements = $this->document->find('meta[property=og:url]')) != 0) {
-            return $elements[0]->attr('content');
+        if (preg_match('#<meta property="og:url" content="(.*?)"#', $this->document->html(), $match)) {
+            return $match[1];
         }
         return $this->url;
     }
@@ -112,8 +112,8 @@ class TvbsParser implements IParser {
 
     protected function parseThumbnailImage()
     {
-        if (count($elements = $this->document->find('meta[property=og:image]')) != 0) {
-            return $elements[0]->attr('content');
+        if (preg_match('#<meta property="og:image" content="(.*?)"#', $this->document->html(), $match)) {
+            return $match[1];
         }
     }
 
