@@ -7,15 +7,15 @@ use wsmwason\TaiwanNewsParser\NewsParser;
 use wsmwason\TaiwanNewsParser\NewsEntry;
 
 /**
- * TVBS
+ * CNA中央通訊社
  */
-class TvbsParser implements IParser {
+class CnaParser implements IParser {
 
     use NewsParser;
 
     public static function getDomain()
     {
-        return 'news.tvbs.com.tw';
+        return 'www.cna.com.tw';
     }
 
     public function parse()
@@ -34,26 +34,43 @@ class TvbsParser implements IParser {
 
     private function parseCompanyName()
     {
-        return 'TVBS';
+        return '中央社';
     }
 
     private function parseUniqueUrl()
     {
-        if (preg_match('#<meta property="og:url" content="(.*?)"#', $this->document->html(), $match)) {
-            return $match[1];
+        if (count($elements = $this->document->find('meta[property=og:url]')) != 0) {
+            return $elements[0]->attr('content');
         }
         return $this->url;
     }
 
     private function parseTitle()
     {
-        if ($this->document->has('.reandr_title h2')) {
-            return $this->document->find('.reandr_title h2')[0]->text();
+        if (count($elements = $this->document->find('h1[itemprop=headline]')) != 0) {
+            return $elements[0]->text();
         }
     }
 
     private function parseContent()
     {
+        if (count($elements = $this->document->find('section[itemprop=articleBody]')) != 0) {
+            $content = $elements[0]->innerHtml();
+
+            // Remove iframe exclude youtube
+            $content = preg_replace_callback('#<iframe[^>]+>#isu', function($match){
+                if (strpos($match[0], 'youtube')!==false) {
+                    return $match[0];
+                }
+                return '';
+            }, $content);
+
+            $content = str_replace('&#13;', '', $content);
+
+            $content = trim($content);
+
+            return $content;
+        }
         if ($this->document->has('.reandrBox')) {
             $content = $this->document->find('.text_Message')[0]->innerHtml();
 
@@ -73,47 +90,50 @@ class TvbsParser implements IParser {
 
     private function parseReportName($content)
     {
-        if ($this->document->has('.Update_time')) {
-            $html = $this->document->find('.Update_time')[0]->innerHtml();
-            if (preg_match_all('#<a href="/opencms/news/reporter/index\.html\?reporter=[^"]+">(.*?)</a>#isu', $html, $matchs)) {
-                return join(' ', $matchs[1]);
-            }
-        }
-
         if (!empty($content)) {
-            $content = strip_tags($content);
-            if (preg_match('#>?([^>|\n]{1,5}?)[/／╱]TVBS#isu', $content, $match)) {
-                return $match[1];
+            if (preg_match('#記者(.{2,10}?)\d+#isu', $content, $match)) {
+                $reportName = $match[1];
+                $placeName = [
+                    '台北', '新北', '台中', '台南', '高雄', '基隆', '新竹', '嘉義', '桃園', '新竹',
+                    '苗栗', '彰化', '南投', '雲林', '嘉義', '屏東', '宜蘭', '花蓮', '台東', '澎湖', '金門', '連江',
+                    '東京', '日內瓦',
+                ];
+                foreach ($placeName as $place) {
+                    if (strpos($reportName, $place) !== false) {
+                        return str_replace($place, '', $reportName);
+                    }
+                }
+                // 名字是兩個字的抱歉了
+                $reportName = mb_substr($match[1], 0, 3, 'UTF-8');
+                return $reportName;
             }
         }
     }
 
     protected function parsePublishTime()
     {
-        if ($this->document->has('.Update_time')) {
-            $html = $this->document->find('.Update_time')[0]->innerHtml();
-
-            if (preg_match_all('#\d{4}/\d{2}/\d{2} \d{2}:\d{2}#', $html, $match)) {
-                return date('Y-m-d H:i:s', strtotime(current($match[0])));
-            }
+        if (count($elements = $this->document->find('meta[itemprop=datePublished]')) != 0) {
+            $datetime = str_replace('T', ' ', $elements[0]->attr('content'));
+            return date('Y-m-d H:i:s', strtotime($datetime));
         }
     }
 
     protected function parseTags()
     {
-        $tags = [];
-        if ($this->document->has('.tag_box')) {
-            foreach ($this->document->find('.tag_box h3') as $tag) {
-                $tags[] = $tag->text();
+        if (count($elements = $this->document->find('meta[itemprop=keywords]')) != 0) {
+            $keyword = $elements[0]->attr('content');
+            $keywords = explode(',', $keyword);
+            if (isset($keywords)) {
+                unset($keywords[0]);
             }
+            return join(',', $keywords);
         }
-        return join(',', $tags);
     }
 
     protected function parseThumbnailImage()
     {
-        if (preg_match('#<meta property="og:image" content="(.*?)"#', $this->document->html(), $match)) {
-            return $match[1];
+        if (count($elements = $this->document->find('meta[property=og:image]')) != 0) {
+            return $elements[0]->attr('content');
         }
     }
 

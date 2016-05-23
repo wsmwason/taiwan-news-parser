@@ -4,10 +4,10 @@ namespace Tests\Parser\Tvbs;
 
 use Tests\TestCase;
 
-class TvbsParser1Test extends TestCase
+class EttodayParser1Test extends TestCase
 {
 
-    protected $url = 'http://news.tvbs.com.tw/politics/news-652955/';
+    protected $url = 'http://www.ettoday.net/news/20160321/666835.htm';
 
     public function testParser()
     {
@@ -19,7 +19,7 @@ class TvbsParser1Test extends TestCase
      */
     public function testCompanyName()
     {
-        $this->assertEquals('TVBS', $this->newsEntry->getCompanyName());
+        $this->assertEquals('ETtoday東森新聞雲', $this->newsEntry->getCompanyName());
     }
 
     /**
@@ -27,7 +27,7 @@ class TvbsParser1Test extends TestCase
      */
     public function testUrl()
     {
-        $this->assertEquals('http://news.tvbs.com.tw/politics/news-652955/', $this->newsEntry->getUrl());
+        $this->assertEquals('http://www.ettoday.net/news/20160321/666835.htm', $this->newsEntry->getUrl());
     }
 
     /**
@@ -35,7 +35,7 @@ class TvbsParser1Test extends TestCase
      */
     public function testReporterName()
     {
-        $this->assertEquals('圖', $this->newsEntry->getReporterName());
+        $this->assertEquals('林彥斌', $this->newsEntry->getReporterName());
     }
 
     /**
@@ -43,7 +43,7 @@ class TvbsParser1Test extends TestCase
      */
     public function testPublishTime()
     {
-        $this->assertEquals('2016-05-08 19:11:00', $this->newsEntry->getPublishTime());
+        $this->assertEquals('2016-03-21 19:42:00', $this->newsEntry->getPublishTime());
     }
 
     /**
@@ -51,7 +51,7 @@ class TvbsParser1Test extends TestCase
      */
     public function testTitle()
     {
-        $this->assertEquals('快訊／2天密集開會！　新政府確定出席WHA', $this->newsEntry->getTitle());
+        $this->assertEquals('中日少棒五強爭霸賽　竹市小健兒力爭', $this->newsEntry->getTitle());
     }
 
     /**
@@ -61,7 +61,7 @@ class TvbsParser1Test extends TestCase
     {
         // Remove new line before test
         $content = str_replace(array("\r", "\n"), '', $this->newsEntry->getContent());
-        $this->assertEquals('<p><span style="font-size: 10px;">最新消息，經過2天的密集開會討論，準行政院發言人童振源表示，確定會派代表出席5月23日在日內瓦舉行的世界衛生大會；童振源表示這件事情絕對不能以任何政治框架加以限縮，至於WHO信函中提到以2758號決議文為基礎的「一中原則」，童振源認為這和台灣參與WHA並無關聯。</span></p><p><span style="font-size: 10px;">圖／TVBS</span></p>', $content);
+        $this->assertEquals('<p><img src="http://static.ettoday.net/images/1680/d1680752.jpg" width="600" height="400" alt=""/></p><p><strong><span> ▲「新竹市中日少棒錦標賽」開打，新竹市長林智堅為選手打氣。</span></strong></p><p>新竹振道記者林彥斌／新竹報導</p><p>中華職棒27年賽季甫開幕，連續舉辦25年的「新竹市中日少棒錦標賽」也在21日正式開打，市長林智堅與西門、東門、東園及香山少棒隊的選手們約定，一定要讓冠軍、榮耀留在新竹，絕不輕言放棄！</p><p>林智堅一早換穿運動鞋，前往新竹簡易棒球場出席「2016年新竹市第25屆中日少棒錦標賽」開幕典禮，除向遠道而來的日本大阪黑豹隊表示歡迎，更勉勵選手透過交流締結友誼。</p><p>林智堅致詞時，還隨機點名東門國小一壘手李明奕及香山國小左外野手蔡士言，他好奇詢問，兩人有無信心把冠軍留在新竹？李明奕、蔡士言皆高呼「有信心」，終讓五強爭霸賽增添不少煙硝味。其中，東門國小李明奕更曾奪得2014年全國奧林匹亞數學競賽第一名，在課業與球隊活動之間力求嚴謹、自律，讓林智堅相當欽佩。</p><p>此外，為讓選手享有更優質的比賽及練習場所，新竹市政府積極籌畫興建虎林棒球場，今（105）年1月13日已舉行開工動土典禮，讓少棒、青少棒、青棒等三級棒球選手擁有自己的主場，終結「流浪練球」的窘境，也提供大面積公園綠地，讓附近居民共同運動使用。</p><p><iframe width="560" height="315" src="https://www.youtube.com/embed/ivTcnmifaRI" frameborder="0" allowfullscreen=""/></p>', $content);
     }
 
     /**
@@ -69,7 +69,7 @@ class TvbsParser1Test extends TestCase
      */
     public function testThumbnailImage()
     {
-        $this->assertEquals('http://www.tvbs.com.tw/export/sites/tvbs/news/politics/images/2016/05/08/TVBS-N_CLEAN_10M_20160508_17-40-02.mp4_20160508_180232.870.jpg', $this->newsEntry->getThumbnailImage());
+        $this->assertEquals('http://static.ettoday.net/images/1680/d1680752.jpg', $this->newsEntry->getThumbnailImage());
     }
 
     /**
@@ -77,7 +77,7 @@ class TvbsParser1Test extends TestCase
      */
     public function testTags()
     {
-        $this->assertEquals('世界衛生大會,WHA,WHO,行政院,出席', $this->newsEntry->getTags());
+        $this->assertEquals('中日少棒五強爭霸賽', $this->newsEntry->getTags());
     }
 
 }

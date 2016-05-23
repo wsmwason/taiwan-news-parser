@@ -7,15 +7,15 @@ use wsmwason\TaiwanNewsParser\NewsParser;
 use wsmwason\TaiwanNewsParser\NewsEntry;
 
 /**
- * TVBS
+ * ETtoday
  */
-class TvbsParser implements IParser {
+class EttodayParser implements IParser {
 
     use NewsParser;
 
     public static function getDomain()
     {
-        return 'news.tvbs.com.tw';
+        return 'www.ettoday.net';
     }
 
     public function parse()
@@ -34,26 +34,51 @@ class TvbsParser implements IParser {
 
     private function parseCompanyName()
     {
-        return 'TVBS';
+        return 'ETtoday東森新聞雲';
     }
 
     private function parseUniqueUrl()
     {
-        if (preg_match('#<meta property="og:url" content="(.*?)"#', $this->document->html(), $match)) {
-            return $match[1];
+        if (count($elements = $this->document->find('meta[property=og:url]')) != 0) {
+            return $elements[0]->attr('content');
         }
         return $this->url;
     }
 
     private function parseTitle()
     {
-        if ($this->document->has('.reandr_title h2')) {
-            return $this->document->find('.reandr_title h2')[0]->text();
+        if (count($elements = $this->document->find('h2[itemprop=headline]')) != 0) {
+            return $elements[0]->text();
         }
     }
 
     private function parseContent()
     {
+        if (count($elements = $this->document->find('sectione[itemprop=articleBody]')) != 0) {
+            $content = $elements[0]->innerHtml();
+
+            $endContentPos = strpos($content, '<!-- 文章內容 結束 -->');
+            if ($endContentPos!==false) {
+                $content = substr($content, 0, $endContentPos);
+            }
+
+            // Remove iframe exclude youtube
+            $content = preg_replace_callback('#<iframe[^>]+>#isu', function($match){
+                if (strpos($match[0], 'youtube')!==false) {
+                    return $match[0];
+                }
+                return '';
+            }, $content);
+
+            // Remove test-keyword
+            $content = preg_replace('#<div class="test-keyword">(.*?)</div>#isu', '', $content);
+            $content = str_replace('<!-- 文章內容 開始 -->', '', $content);
+            $content = str_replace('&#13;', '', $content);
+
+            $content = trim($content);
+
+            return $content;
+        }
         if ($this->document->has('.reandrBox')) {
             $content = $this->document->find('.text_Message')[0]->innerHtml();
 
@@ -73,16 +98,8 @@ class TvbsParser implements IParser {
 
     private function parseReportName($content)
     {
-        if ($this->document->has('.Update_time')) {
-            $html = $this->document->find('.Update_time')[0]->innerHtml();
-            if (preg_match_all('#<a href="/opencms/news/reporter/index\.html\?reporter=[^"]+">(.*?)</a>#isu', $html, $matchs)) {
-                return join(' ', $matchs[1]);
-            }
-        }
-
         if (!empty($content)) {
-            $content = strip_tags($content);
-            if (preg_match('#>?([^>|\n]{1,5}?)[/／╱]TVBS#isu', $content, $match)) {
+            if (preg_match('#記者(.{2,6}?)／#isu', $content, $match)) {
                 return $match[1];
             }
         }
@@ -90,30 +107,23 @@ class TvbsParser implements IParser {
 
     protected function parsePublishTime()
     {
-        if ($this->document->has('.Update_time')) {
-            $html = $this->document->find('.Update_time')[0]->innerHtml();
-
-            if (preg_match_all('#\d{4}/\d{2}/\d{2} \d{2}:\d{2}#', $html, $match)) {
-                return date('Y-m-d H:i:s', strtotime(current($match[0])));
-            }
+        if (count($elements = $this->document->find('meta[itemprop=datePublished]')) != 0) {
+            $datetime = str_replace('T', ' ', $elements[0]->attr('content'));
+            return date('Y-m-d H:i:s', strtotime($datetime));
         }
     }
 
     protected function parseTags()
     {
-        $tags = [];
-        if ($this->document->has('.tag_box')) {
-            foreach ($this->document->find('.tag_box h3') as $tag) {
-                $tags[] = $tag->text();
-            }
+        if (count($elements = $this->document->find('meta[itemprop=keywords]')) != 0) {
+            return $elements[0]->attr('content');
         }
-        return join(',', $tags);
     }
 
     protected function parseThumbnailImage()
     {
-        if (preg_match('#<meta property="og:image" content="(.*?)"#', $this->document->html(), $match)) {
-            return $match[1];
+        if (count($elements = $this->document->find('meta[property=og:image]')) != 0) {
+            return $elements[0]->attr('content');
         }
     }
 

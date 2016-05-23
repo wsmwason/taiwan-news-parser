@@ -4,10 +4,10 @@ namespace Tests\Parser\Tvbs;
 
 use Tests\TestCase;
 
-class TvbsParser1Test extends TestCase
+class EttodayParser3Test extends TestCase
 {
 
-    protected $url = 'http://news.tvbs.com.tw/politics/news-652955/';
+    protected $url = 'http://www.ettoday.net/news/20160315/663047.htm';
 
     public function testParser()
     {
@@ -19,7 +19,7 @@ class TvbsParser1Test extends TestCase
      */
     public function testCompanyName()
     {
-        $this->assertEquals('TVBS', $this->newsEntry->getCompanyName());
+        $this->assertEquals('ETtoday東森新聞雲', $this->newsEntry->getCompanyName());
     }
 
     /**
@@ -27,7 +27,7 @@ class TvbsParser1Test extends TestCase
      */
     public function testUrl()
     {
-        $this->assertEquals('http://news.tvbs.com.tw/politics/news-652955/', $this->newsEntry->getUrl());
+        $this->assertEquals('http://www.ettoday.net/news/20160315/663047.htm', $this->newsEntry->getUrl());
     }
 
     /**
@@ -35,7 +35,7 @@ class TvbsParser1Test extends TestCase
      */
     public function testReporterName()
     {
-        $this->assertEquals('圖', $this->newsEntry->getReporterName());
+        $this->assertEquals('洪聖壹', $this->newsEntry->getReporterName());
     }
 
     /**
@@ -43,7 +43,7 @@ class TvbsParser1Test extends TestCase
      */
     public function testPublishTime()
     {
-        $this->assertEquals('2016-05-08 19:11:00', $this->newsEntry->getPublishTime());
+        $this->assertEquals('2016-03-15 04:02:00', $this->newsEntry->getPublishTime());
     }
 
     /**
@@ -51,7 +51,7 @@ class TvbsParser1Test extends TestCase
      */
     public function testTitle()
     {
-        $this->assertEquals('快訊／2天密集開會！　新政府確定出席WHA', $this->newsEntry->getTitle());
+        $this->assertEquals('GDC 16／AMD 發表首款內建處理器的VR裝置Sulon Q', $this->newsEntry->getTitle());
     }
 
     /**
@@ -61,7 +61,7 @@ class TvbsParser1Test extends TestCase
     {
         // Remove new line before test
         $content = str_replace(array("\r", "\n"), '', $this->newsEntry->getContent());
-        $this->assertEquals('<p><span style="font-size: 10px;">最新消息，經過2天的密集開會討論，準行政院發言人童振源表示，確定會派代表出席5月23日在日內瓦舉行的世界衛生大會；童振源表示這件事情絕對不能以任何政治框架加以限縮，至於WHO信函中提到以2758號決議文為基礎的「一中原則」，童振源認為這和台灣參與WHA並無關聯。</span></p><p><span style="font-size: 10px;">圖／TVBS</span></p>', $content);
+        $this->assertEquals('<p><iframe width="560" height="315" src="https://www.youtube.com/embed/zPT4-nRP7Bk" frameborder="0" allowfullscreen=""/></p><p>記者洪聖壹／美國舊金山報導</p><p>AMD 稍早與合作夥伴 Sulon 宣布推出內建處理器的 VR 頭戴式裝置 Sulon Q，擁有雙鏡頭，可以感應使用者身體動作，最重要的是它採用 Windows 10 平台，搭載 AMD FX-8800P 四核心處理器跟 Radeon R7 顯卡，支援 2K 解析度顯示，相較高階 VR 裝置來說，硬體規格不高，但是已經讓 mobile VR 有的重大的突破。</p><p><img src="http://static.ettoday.net/images/1667/d1667516.jpg" alt=""/></p><p>Sulon Q 搭載 AMD FX-8800P 四核心處理器跟 Radeon R7 顯卡，還內建 256GB SSD硬碟，8GB 記憶體，並且擁有一個 2560×1440 OLED 螢幕，螢幕前方內建了兩顆鏡頭，結合了實時機器視覺技術與混合現實空間的處理，換句話說，就是支援 VR 與 AR，並且提供手勢識別功能，這兩顆鏡頭可以偵測使用者的動作，不用像是現有的虛擬實境裝置一樣，要在頭戴式裝置上設計追蹤感測器，也不用線，更不用使用控制器或者戴上手套，就可以用自己的雙手，探索虛擬實境。</p><p><img src="http://static.ettoday.net/images/1667/d1667513.jpg" alt=""/></p><p><img src="http://static.ettoday.net/images/1667/d1667514.jpg" alt=""/></p><p><img src="http://static.ettoday.net/images/1667/d1667515.jpg" alt=""/></p><p>目前 Sulon Q 還只是開發原型，並沒有相關的上市情報，不過像這樣子把電腦戴在頭上玩遊戲，以現有技術來說，還有很多問題需要克服，好比說續航力、電磁波對人腦的影響、售價等等，這些 AMD 與 Sulon Q 尚未做進一步解釋，如果這些都解決了，那麼同時要思考是，玩家們的身心，已經準備好要迎接「真。虛擬實境」時代的來臨了嗎？</p>', $content);
     }
 
     /**
@@ -69,7 +69,7 @@ class TvbsParser1Test extends TestCase
      */
     public function testThumbnailImage()
     {
-        $this->assertEquals('http://www.tvbs.com.tw/export/sites/tvbs/news/politics/images/2016/05/08/TVBS-N_CLEAN_10M_20160508_17-40-02.mp4_20160508_180232.870.jpg', $this->newsEntry->getThumbnailImage());
+        $this->assertEquals('http://static.ettoday.net/images/1667/d1667516.jpg', $this->newsEntry->getThumbnailImage());
     }
 
     /**
@@ -77,7 +77,7 @@ class TvbsParser1Test extends TestCase
      */
     public function testTags()
     {
-        $this->assertEquals('世界衛生大會,WHA,WHO,行政院,出席', $this->newsEntry->getTags());
+        $this->assertEquals('AMD,Sulon Q,VR,虛擬實境', $this->newsEntry->getTags());
     }
 
 }

@@ -72,6 +72,8 @@ $newsEntry->getThumbnailImage();
 
  * 蘋果日報
  * TVBS
+ * ETtoday東森新聞雲
+ * 中央社
 
 ### 貢獻
 
