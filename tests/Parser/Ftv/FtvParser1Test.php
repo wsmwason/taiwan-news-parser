@@ -4,10 +4,10 @@ namespace Tests\Parser\Tvbs;
 
 use Tests\TestCase;
 
-class EttodayParser1Test extends TestCase
+class FtvParser1Test extends TestCase
 {
 
-    protected $url = 'http://www.ettoday.net/news/20160321/666835.htm';
+    protected $url = 'http://news.ftv.com.tw/NewsContent.aspx?ntype=class&sno=2016603A05M1';
 
     public function testParser()
     {
@@ -19,7 +19,7 @@ class EttodayParser1Test extends TestCase
      */
     public function testCompanyName()
     {
-        $this->assertEquals('ETtoday東森新聞雲', $this->newsEntry->getCompanyName());
+        $this->assertEquals('民視新聞', $this->newsEntry->getCompanyName());
     }
 
     /**
@@ -27,7 +27,7 @@ class EttodayParser1Test extends TestCase
      */
     public function testUrl()
     {
-        $this->assertEquals('http://www.ettoday.net/news/20160321/666835.htm', $this->newsEntry->getUrl());
+        $this->assertEquals('http://news.ftv.com.tw/NewsContent.aspx?ntype=class&sno=2016603A05M1', $this->newsEntry->getUrl());
     }
 
     /**
@@ -35,7 +35,7 @@ class EttodayParser1Test extends TestCase
      */
     public function testReporterName()
     {
-        $this->assertEquals('林彥斌', $this->newsEntry->getReporterName());
+        $this->assertEquals('', $this->newsEntry->getReporterName());
     }
 
     /**
@@ -43,7 +43,7 @@ class EttodayParser1Test extends TestCase
      */
     public function testPublishTime()
     {
-        $this->assertEquals('2016-03-21 19:42:00', $this->newsEntry->getPublishTime());
+        $this->assertEquals('2016-06-03 14:26:00', $this->newsEntry->getPublishTime());
     }
 
     /**
@@ -51,7 +51,7 @@ class EttodayParser1Test extends TestCase
      */
     public function testTitle()
     {
-        $this->assertEquals('中日少棒五強爭霸賽　竹市小健兒力爭', $this->newsEntry->getTitle());
+        $this->assertEquals('印地安人突破鐵牛陣 皇家中止6連勝', $this->newsEntry->getTitle());
     }
 
     /**
@@ -59,9 +59,8 @@ class EttodayParser1Test extends TestCase
      */
     public function testContent()
     {
-        // Remove new line before test
-        $content = str_replace(array("\r", "\n"), '', $this->newsEntry->getContent());
-        $this->assertEquals('<p><img src="http://static.ettoday.net/images/1680/d1680752.jpg" width="600" height="400" alt=""/></p><p><strong><span> ▲「新竹市中日少棒錦標賽」開打，新竹市長林智堅為選手打氣。</span></strong></p><p>新竹振道記者林彥斌／新竹報導</p><p>中華職棒27年賽季甫開幕，連續舉辦25年的「新竹市中日少棒錦標賽」也在21日正式開打，市長林智堅與西門、東門、東園及香山少棒隊的選手們約定，一定要讓冠軍、榮耀留在新竹，絕不輕言放棄！</p><p>林智堅一早換穿運動鞋，前往新竹簡易棒球場出席「2016年新竹市第25屆中日少棒錦標賽」開幕典禮，除向遠道而來的日本大阪黑豹隊表示歡迎，更勉勵選手透過交流締結友誼。</p><p>林智堅致詞時，還隨機點名東門國小一壘手李明奕及香山國小左外野手蔡士言，他好奇詢問，兩人有無信心把冠軍留在新竹？李明奕、蔡士言皆高呼「有信心」，終讓五強爭霸賽增添不少煙硝味。其中，東門國小李明奕更曾奪得2014年全國奧林匹亞數學競賽第一名，在課業與球隊活動之間力求嚴謹、自律，讓林智堅相當欽佩。</p><p>此外，為讓選手享有更優質的比賽及練習場所，新竹市政府積極籌畫興建虎林棒球場，今（105）年1月13日已舉行開工動土典禮，讓少棒、青少棒、青棒等三級棒球選手擁有自己的主場，終結「流浪練球」的窘境，也提供大面積公園綠地，讓附近居民共同運動使用。</p><p><iframe width="560" height="315" src="https://www.youtube.com/embed/ivTcnmifaRI" frameborder="0" allowfullscreen=""/></p>', $content);
+        $content = $this->newsEntry->getContent();
+        $this->assertEquals('王建民效力的皇家隊，7~9局的後援投手鐵牛陣，是他們相當有名的勝利方程式，但今天（6月3日）皇家佈局投手掉分，終結者也救援失敗，讓印地安人以再見高飛犧牲打逆轟獲勝，也中止皇家本季最長的6連勝。<br /><br />球賽主播：「切球被打出去布泰拉，這是他今年（2016年）的第1支全壘打。」<br /><br />最近機槍上膛的皇家，這場球口徑加大，讓傷兵歸隊的Carlos Carrasco，受到重傷，不過印地安人的打線，就是有辦法一分一分的追，3局Ramirez強力安打，原住民朋友把比數追平了，不過帶著大砲來的皇家，6局又來一發。<br /><br />球賽主播：「喔我的天啊，在左外野的角落，卡伯勒本季第2發全壘打。」<br /><br />皇家兩度取得領先，但是堅強的牛棚，今天凸了槌，關鍵就是9局下半，Francisco Lindor的這一棒。<br /><br />球賽主播：「右外野方向平飛球，這是支安打球，落地還滾到牆邊，馬丁尼茲跑回了追平分，林朵繞過二壘，安全衝上三壘。」<br /><br />打下追平分的三壘安打，變成皇家麻煩大了，過去專門逆轉勝的皇家部隊，這場球角色轉換，體驗到了被逆轉的感覺。<br /><br />球賽主播：「林朵進攻要跑回來了，球回傳印地安人又一次逆轉勝。」<br /><br />昨天雙城今天皇家，印地安人連續兩天用再見一擊取勝，而皇家4：5遭到逆轉，中斷了最近的6連勝。（民視新聞綜合報導）', $content);
     }
 
     /**
@@ -69,7 +68,7 @@ class EttodayParser1Test extends TestCase
      */
     public function testThumbnailImage()
     {
-        $this->assertEquals('http://static.ettoday.net/images/1680/d1680752.jpg', $this->newsEntry->getThumbnailImage());
+        $this->assertEquals('http://news.ftv.com.tw/client/img/2016/06/03/2016603A05M1.jpg', $this->newsEntry->getThumbnailImage());
     }
 
     /**
@@ -77,7 +76,7 @@ class EttodayParser1Test extends TestCase
      */
     public function testTags()
     {
-        $this->assertEquals('中日少棒五強爭霸賽', $this->newsEntry->getTags());
+        $this->assertEquals('', $this->newsEntry->getTags());
     }
 
 }

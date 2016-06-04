@@ -7,15 +7,15 @@ use wsmwason\TaiwanNewsParser\NewsParser;
 use wsmwason\TaiwanNewsParser\NewsEntry;
 
 /**
- * ETtoday
+ * 民視新聞
  */
-class EttodayParser implements IParser {
+class FtvParser implements IParser {
 
     use NewsParser;
 
     public static function getDomain()
     {
-        return 'www.ettoday.net';
+        return 'news.ftv.com.tw';
     }
 
     public function parse()
@@ -34,7 +34,7 @@ class EttodayParser implements IParser {
 
     private function parseCompanyName()
     {
-        return 'ETtoday東森新聞雲';
+        return '民視新聞';
     }
 
     private function parseUniqueUrl()
@@ -47,51 +47,19 @@ class EttodayParser implements IParser {
 
     private function parseTitle()
     {
-        if (count($elements = $this->document->find('h2[itemprop=headline]')) != 0) {
-            return $elements[0]->text();
+        if (count($elements = $this->document->find('meta[property=og:title]')) != 0) {
+            return $elements[0]->attr('content');
         }
     }
 
     private function parseContent()
     {
-        if (count($elements = $this->document->find('sectione[itemprop=articleBody]')) != 0) {
+        if (count($elements = $this->document->find('#newscontent')) != 0) {
             $content = $elements[0]->innerHtml();
 
-            $endContentPos = strpos($content, '<!-- 文章內容 結束 -->');
-            if ($endContentPos!==false) {
-                $content = substr($content, 0, $endContentPos);
-            }
-
-            // Remove iframe exclude youtube
-            $content = preg_replace_callback('#<iframe[^>]+>#isu', function($match){
-                if (strpos($match[0], 'youtube')!==false) {
-                    return $match[0];
-                }
-                return '';
-            }, $content);
-
-            // Remove test-keyword
-            $content = preg_replace('#<div class="test-keyword">(.*?)</div>#isu', '', $content);
-            $content = str_replace('<!-- 文章內容 開始 -->', '', $content);
             $content = str_replace('&#13;', '', $content);
 
             $content = trim($content);
-
-            return $content;
-        }
-        if ($this->document->has('.reandrBox')) {
-            $content = $this->document->find('.text_Message')[0]->innerHtml();
-
-            // Remove unused div
-            $content = preg_replace('#<div id="div-inread-ad">(.*?)</div>#isu', '', $content);
-            $content = preg_replace('#<div class="g-ytsubscribe"[^>]+>#isu', '', $content);
-            $content = preg_replace('#<script[^>]+>#isu', '', $content);
-
-            // Remove
-            $content = str_replace('<p><strong>★更多高畫質新聞【線上看】 ▶ ▶</strong></p>', '', $content);
-
-            $content = trim($content);
-
             return $content;
         }
     }
@@ -99,17 +67,32 @@ class EttodayParser implements IParser {
     private function parseReportName($content)
     {
         if (!empty($content)) {
-            if (preg_match('#記者(.{2,6}?)／#isu', $content, $match)) {
-                return $match[1];
+            if (preg_match('#民視新聞(.{2,12}?)(綜合)?報導#isu', $content, $match)) {
+                $reportName = $match[1];
+                $placeName = [
+                    '台北', '新北', '台中', '台南', '高雄', '基隆', '新竹', '嘉義', '桃園', '新竹',
+                    '苗栗', '彰化', '南投', '雲林', '嘉義', '屏東', '宜蘭', '花蓮', '台東', '澎湖', '金門', '連江',
+                ];
+                if ($reportName=='綜合') {
+                    return;
+                }
+                foreach ($placeName as $place) {
+                    if (strpos($reportName, $place . '市') !== false) {
+                        return str_replace($place . '市', '', $reportName);
+                    }
+                    if (strpos($reportName, $place) !== false) {
+                        return str_replace($place, '', $reportName);
+                    }
+                }
+                return $reportName;
             }
         }
     }
 
     protected function parsePublishTime()
     {
-        if (count($elements = $this->document->find('meta[itemprop=datePublished]')) != 0) {
-            $datetime = str_replace('T', ' ', $elements[0]->attr('content'));
-            return date('Y-m-d H:i:s', strtotime($datetime));
+        if (count($elements = $this->document->find('#ctl00_ContentPlaceHolder1_Label2')) != 0) {
+            return date('Y-m-d H:i:s', strtotime($elements[0]->text()));
         }
     }
 

@@ -4,10 +4,10 @@ namespace Tests\Parser\Tvbs;
 
 use Tests\TestCase;
 
-class EttodayParser1Test extends TestCase
+class FtvParser2Test extends TestCase
 {
 
-    protected $url = 'http://www.ettoday.net/news/20160321/666835.htm';
+    protected $url = 'http://news.ftv.com.tw/NewsContent.aspx?ntype=class&sno=2016603C12M1';
 
     public function testParser()
     {
@@ -19,7 +19,7 @@ class EttodayParser1Test extends TestCase
      */
     public function testCompanyName()
     {
-        $this->assertEquals('ETtoday東森新聞雲', $this->newsEntry->getCompanyName());
+        $this->assertEquals('民視新聞', $this->newsEntry->getCompanyName());
     }
 
     /**
@@ -27,7 +27,7 @@ class EttodayParser1Test extends TestCase
      */
     public function testUrl()
     {
-        $this->assertEquals('http://www.ettoday.net/news/20160321/666835.htm', $this->newsEntry->getUrl());
+        $this->assertEquals('http://news.ftv.com.tw/NewsContent.aspx?ntype=class&sno=2016603C12M1', $this->newsEntry->getUrl());
     }
 
     /**
@@ -35,7 +35,7 @@ class EttodayParser1Test extends TestCase
      */
     public function testReporterName()
     {
-        $this->assertEquals('林彥斌', $this->newsEntry->getReporterName());
+        $this->assertEquals('賴姵君', $this->newsEntry->getReporterName());
     }
 
     /**
@@ -43,7 +43,7 @@ class EttodayParser1Test extends TestCase
      */
     public function testPublishTime()
     {
-        $this->assertEquals('2016-03-21 19:42:00', $this->newsEntry->getPublishTime());
+        $this->assertEquals('2016-06-03 18:24:00', $this->newsEntry->getPublishTime());
     }
 
     /**
@@ -51,7 +51,7 @@ class EttodayParser1Test extends TestCase
      */
     public function testTitle()
     {
-        $this->assertEquals('中日少棒五強爭霸賽　竹市小健兒力爭', $this->newsEntry->getTitle());
+        $this->assertEquals('黑熊現蹤玉山 驚傳追人撞門搶食物', $this->newsEntry->getTitle());
     }
 
     /**
@@ -59,9 +59,8 @@ class EttodayParser1Test extends TestCase
      */
     public function testContent()
     {
-        // Remove new line before test
-        $content = str_replace(array("\r", "\n"), '', $this->newsEntry->getContent());
-        $this->assertEquals('<p><img src="http://static.ettoday.net/images/1680/d1680752.jpg" width="600" height="400" alt=""/></p><p><strong><span> ▲「新竹市中日少棒錦標賽」開打，新竹市長林智堅為選手打氣。</span></strong></p><p>新竹振道記者林彥斌／新竹報導</p><p>中華職棒27年賽季甫開幕，連續舉辦25年的「新竹市中日少棒錦標賽」也在21日正式開打，市長林智堅與西門、東門、東園及香山少棒隊的選手們約定，一定要讓冠軍、榮耀留在新竹，絕不輕言放棄！</p><p>林智堅一早換穿運動鞋，前往新竹簡易棒球場出席「2016年新竹市第25屆中日少棒錦標賽」開幕典禮，除向遠道而來的日本大阪黑豹隊表示歡迎，更勉勵選手透過交流締結友誼。</p><p>林智堅致詞時，還隨機點名東門國小一壘手李明奕及香山國小左外野手蔡士言，他好奇詢問，兩人有無信心把冠軍留在新竹？李明奕、蔡士言皆高呼「有信心」，終讓五強爭霸賽增添不少煙硝味。其中，東門國小李明奕更曾奪得2014年全國奧林匹亞數學競賽第一名，在課業與球隊活動之間力求嚴謹、自律，讓林智堅相當欽佩。</p><p>此外，為讓選手享有更優質的比賽及練習場所，新竹市政府積極籌畫興建虎林棒球場，今（105）年1月13日已舉行開工動土典禮，讓少棒、青少棒、青棒等三級棒球選手擁有自己的主場，終結「流浪練球」的窘境，也提供大面積公園綠地，讓附近居民共同運動使用。</p><p><iframe width="560" height="315" src="https://www.youtube.com/embed/ivTcnmifaRI" frameborder="0" allowfullscreen=""/></p>', $content);
+        $content = $this->newsEntry->getContent();
+        $this->assertEquals('爬玉山，小心有熊出沒！玉管處，日前委託工人整修東部園區吊橋，兩名工人，5天內二度在「抱崖吊橋」，目擊台灣黑熊出沒，而且為了覓食，黑熊還猛追，試圖撞開山屋大門。<br /><br />工人檢修抱崖吊橋，5月11日深夜休息，突然聽到動物吼叫聲，外出察看，忽有龐然大物，拔山倒樹而來，蓋一「台灣黑熊」也。<br /><br />聲音來源：目擊工人：「直接上來要撥我的臉，最起碼有200斤以上，我馬上關門，用鋼條鐵管封起來，雙腳都發抖軟掉了。」<br /><br />高約2公尺的黑熊，從山林竄出，相隔4天又再度遇見，兩名工人拔腿跑回山屋，黑熊猛衝追趕，還曾撞門搶奪食物。<br /><br />聲音來源：目擊工人：「10公斤的豬肉還有一些罐頭，乾糧泡麵麵條，全部被吃光。」<br /><br />黑熊撞門，在門上留下掌印，工人下山通報，還留下警告字句，提醒山友注意。玉管處呼籲，爬山結伴而行，攜帶防熊噴霧劑，如果遇到黑熊，必須冷靜面對，安靜迅速離開現場，避免過度驚嚇或正面衝突。（民視新聞賴姵君南投報導）', $content);
     }
 
     /**
@@ -69,7 +68,7 @@ class EttodayParser1Test extends TestCase
      */
     public function testThumbnailImage()
     {
-        $this->assertEquals('http://static.ettoday.net/images/1680/d1680752.jpg', $this->newsEntry->getThumbnailImage());
+        $this->assertEquals('http://news.ftv.com.tw/client/img/2016/06/03/2016603C12M1.jpg', $this->newsEntry->getThumbnailImage());
     }
 
     /**
@@ -77,7 +76,7 @@ class EttodayParser1Test extends TestCase
      */
     public function testTags()
     {
-        $this->assertEquals('中日少棒五強爭霸賽', $this->newsEntry->getTags());
+        $this->assertEquals('', $this->newsEntry->getTags());
     }
 
 }
