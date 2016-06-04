@@ -71,21 +71,6 @@ class CnaParser implements IParser {
 
             return $content;
         }
-        if ($this->document->has('.reandrBox')) {
-            $content = $this->document->find('.text_Message')[0]->innerHtml();
-
-            // Remove unused div
-            $content = preg_replace('#<div id="div-inread-ad">(.*?)</div>#isu', '', $content);
-            $content = preg_replace('#<div class="g-ytsubscribe"[^>]+>#isu', '', $content);
-            $content = preg_replace('#<script[^>]+>#isu', '', $content);
-
-            // Remove
-            $content = str_replace('<p><strong>★更多高畫質新聞【線上看】 ▶ ▶</strong></p>', '', $content);
-
-            $content = trim($content);
-
-            return $content;
-        }
     }
 
     private function parseReportName($content)
