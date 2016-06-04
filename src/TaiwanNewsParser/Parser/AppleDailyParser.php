@@ -60,13 +60,15 @@ class AppleDailyParser implements IParser {
 
             // Remove iframe
             $content = preg_replace('#<iframe[^>]+>#isu', '', $content);
-
+            
             // Remove unused div
             $content = preg_replace('#<div id="teadstv">(.*?)</div>#isu', '', $content);
             $content = preg_replace('#<div id="goldenhorse">(.*?)</div>#isu', '', $content);
             $content = preg_replace('#<div id="textlink">(.*?)</div>#isu', '', $content);
             $content = preg_replace('#<a _moz_dirty=""[^>]+>(.*?)</a>#isu', '', $content);
             $content = str_replace('<div style=" clear:both"/>', '', $content);
+            $content = str_replace('&#13;', '', $content);
+
             $content = trim($content);
 
             return $content;
